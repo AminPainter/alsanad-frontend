@@ -2,7 +2,7 @@ import { type FC } from 'react';
 import { TbLayoutSidebarLeftCollapse } from 'react-icons/tb';
 import { FaRegPenToSquare } from 'react-icons/fa6';
 
-import { useSidebar } from '@/features/inbox/public';
+import { useSidebar } from '@/shared/sidebar/public';
 
 export const SidebarHeader: FC = () => {
   const { closeSidebar } = useSidebar();

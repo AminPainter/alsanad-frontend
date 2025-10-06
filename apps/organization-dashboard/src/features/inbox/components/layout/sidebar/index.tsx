@@ -9,7 +9,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@alsanad/ui/avatar';
 import { SidebarLink } from './sidebar-link';
 import { SidebarHeader } from './sidebar-header';
 
-import { useSidebar } from '../../../hooks/use-sidebar';
+import { useSidebar } from '@/shared/sidebar/public';
 
 export const Sidebar: FC = () => {
   const { isSidebarOpen } = useSidebar();
