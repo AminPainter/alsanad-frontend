@@ -1,3 +1,9 @@
 @import 'tailwindcss';
 
 @source "../../../packages/ui";
+
+@import '../../../packages/ui/src/styles/index.css';
+
+button {
+  cursor: pointer;
+}

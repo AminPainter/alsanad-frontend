@@ -1,9 +1,9 @@
-import { createFileRoute, Link } from '@tanstack/react-router';
 import type { FC } from 'react';
+import { createFileRoute, Link, Outlet } from '@tanstack/react-router';
 import { PiHouse } from 'react-icons/pi';
 import { Avatar, AvatarFallback, AvatarImage } from '@alsanad/ui/avatar';
 
-const HomePage: FC = () => {
+const DashboardLayout: FC = () => {
   return (
     <div className='grid grid-cols-[4rem_1fr] h-dvh'>
       <nav className='bg-gray-100 flex flex-col'>
@@ -31,11 +31,13 @@ const HomePage: FC = () => {
         </div>
       </nav>
 
-      <main>main content goes here</main>
+      <main>
+        <Outlet />
+      </main>
     </div>
   );
 };
 
-export const Route = createFileRoute('/(app)/')({
-  component: HomePage,
+export const Route = createFileRoute('/(app)/_layout')({
+  component: DashboardLayout,
 });

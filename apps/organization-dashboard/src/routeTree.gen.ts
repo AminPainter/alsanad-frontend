@@ -8,51 +8,125 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
-import { Route as rootRouteImport } from './routes/__root'
-import { Route as appIndexRouteImport } from './routes/(app)/index'
+import { createFileRoute } from '@tanstack/react-router'
 
-const appIndexRoute = appIndexRouteImport.update({
-  id: '/(app)/',
-  path: '/',
+import { Route as rootRouteImport } from './routes/__root'
+import { Route as appLayoutRouteImport } from './routes/(app)/_layout'
+import { Route as appLayoutIndexRouteImport } from './routes/(app)/_layout/index'
+import { Route as appLayoutInboxIndexRouteImport } from './routes/(app)/_layout/inbox/index'
+
+const appRouteImport = createFileRoute('/(app)')()
+
+const appRoute = appRouteImport.update({
+  id: '/(app)',
   getParentRoute: () => rootRouteImport,
+} as any)
+const appLayoutRoute = appLayoutRouteImport.update({
+  id: '/_layout',
+  getParentRoute: () => appRoute,
+} as any)
+const appLayoutIndexRoute = appLayoutIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => appLayoutRoute,
+} as any)
+const appLayoutInboxIndexRoute = appLayoutInboxIndexRouteImport.update({
+  id: '/inbox/',
+  path: '/inbox/',
+  getParentRoute: () => appLayoutRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof appIndexRoute
+  '/': typeof appLayoutIndexRoute
+  '/inbox': typeof appLayoutInboxIndexRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof appIndexRoute
+  '/': typeof appLayoutIndexRoute
+  '/inbox': typeof appLayoutInboxIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/(app)/': typeof appIndexRoute
+  '/(app)': typeof appRouteWithChildren
+  '/(app)/_layout': typeof appLayoutRouteWithChildren
+  '/(app)/_layout/': typeof appLayoutIndexRoute
+  '/(app)/_layout/inbox/': typeof appLayoutInboxIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths: '/' | '/inbox'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/(app)/'
+  to: '/' | '/inbox'
+  id:
+    | '__root__'
+    | '/(app)'
+    | '/(app)/_layout'
+    | '/(app)/_layout/'
+    | '/(app)/_layout/inbox/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  appIndexRoute: typeof appIndexRoute
+  appRoute: typeof appRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/(app)/': {
-      id: '/(app)/'
+    '/(app)': {
+      id: '/(app)'
       path: '/'
       fullPath: '/'
-      preLoaderRoute: typeof appIndexRouteImport
+      preLoaderRoute: typeof appRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/(app)/_layout': {
+      id: '/(app)/_layout'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof appLayoutRouteImport
+      parentRoute: typeof appRoute
+    }
+    '/(app)/_layout/': {
+      id: '/(app)/_layout/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof appLayoutIndexRouteImport
+      parentRoute: typeof appLayoutRoute
+    }
+    '/(app)/_layout/inbox/': {
+      id: '/(app)/_layout/inbox/'
+      path: '/inbox'
+      fullPath: '/inbox'
+      preLoaderRoute: typeof appLayoutInboxIndexRouteImport
+      parentRoute: typeof appLayoutRoute
     }
   }
 }
 
+interface appLayoutRouteChildren {
+  appLayoutIndexRoute: typeof appLayoutIndexRoute
+  appLayoutInboxIndexRoute: typeof appLayoutInboxIndexRoute
+}
+
+const appLayoutRouteChildren: appLayoutRouteChildren = {
+  appLayoutIndexRoute: appLayoutIndexRoute,
+  appLayoutInboxIndexRoute: appLayoutInboxIndexRoute,
+}
+
+const appLayoutRouteWithChildren = appLayoutRoute._addFileChildren(
+  appLayoutRouteChildren,
+)
+
+interface appRouteChildren {
+  appLayoutRoute: typeof appLayoutRouteWithChildren
+}
+
+const appRouteChildren: appRouteChildren = {
+  appLayoutRoute: appLayoutRouteWithChildren,
+}
+
+const appRouteWithChildren = appRoute._addFileChildren(appRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
-  appIndexRoute: appIndexRoute,
+  appRoute: appRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
