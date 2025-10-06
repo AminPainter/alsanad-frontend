@@ -18,7 +18,7 @@ export const Sidebar: FC = () => {
     <div
       className={cn(
         'sticky top-0 h-full w-60 bg-gray-200 origin-left overflow-hidden transition-all px-3 py-4',
-        { 'scale-x-0 w-0 invisible': !isSidebarOpen }
+        { 'scale-x-0 w-0 invisible px-0': !isSidebarOpen }
       )}>
       <SidebarHeader />
 
